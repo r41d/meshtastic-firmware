@@ -369,6 +369,16 @@ void AdminModule::handleSetConfig(const meshtastic_Config &c)
     case meshtastic_Config_power_tag:
         LOG_INFO("Setting config: Power\n");
         config.has_power = true;
+        // Really just the adc override is the only thing that can change without a reboot
+        if (config.power.device_battery_ina_address == c.payload_variant.power.device_battery_ina_address &&
+            config.power.is_power_saving == c.payload_variant.power.is_power_saving &&
+            config.power.ls_secs == c.payload_variant.power.ls_secs &&
+            config.power.min_wake_secs == c.payload_variant.power.min_wake_secs &&
+            config.power.on_battery_shutdown_after_secs == c.payload_variant.power.on_battery_shutdown_after_secs &&
+            config.power.sds_secs == c.payload_variant.power.sds_secs &&
+            config.power.wait_bluetooth_secs == c.payload_variant.power.wait_bluetooth_secs) {
+            requiresReboot = false;
+        }
         config.power = c.payload_variant.power;
         break;
     case meshtastic_Config_network_tag:
@@ -379,6 +389,12 @@ void AdminModule::handleSetConfig(const meshtastic_Config &c)
     case meshtastic_Config_display_tag:
         LOG_INFO("Setting config: Display\n");
         config.has_display = true;
+        if (config.display.screen_on_secs == c.payload_variant.display.screen_on_secs &&
+            config.display.flip_screen == c.payload_variant.display.flip_screen &&
+            config.display.wake_on_tap_or_motion == c.payload_variant.display.wake_on_tap_or_motion &&
+            config.display.oled == c.payload_variant.display.oled) {
+            requiresReboot = false;
+        }
         config.display = c.payload_variant.display;
         break;
     case meshtastic_Config_lora_tag:
