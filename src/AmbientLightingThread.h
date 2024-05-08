@@ -1,3 +1,5 @@
+#pragma once
+
 #include "configuration.h"
 
 #ifdef HAS_NCP5623
@@ -81,6 +83,7 @@ class AmbientLightingThread : public concurrency::OSThread
 #endif
         return disable();
     }
+    void start() { setIntervalFromNow(0); };
 
   private:
     ScanI2C::DeviceType _type = ScanI2C::DeviceType::NONE;
@@ -125,5 +128,6 @@ class AmbientLightingThread : public concurrency::OSThread
 #endif
     }
 };
+extern AmbientLightingThread *ambientLightingThread;
 
 } // namespace concurrency

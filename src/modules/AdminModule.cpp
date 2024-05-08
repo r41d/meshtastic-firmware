@@ -26,6 +26,9 @@
 #if !MESHTASTIC_EXCLUDE_GPS
 #include "GPS.h"
 #endif
+#if !MESHTASTIC_EXCLUDE_ENVIRONMENTAL_SENSOR
+#include "AccelerometerThread.h"
+#endif
 
 AdminModule *adminModule;
 bool hasOpenEditTransaction;
@@ -391,10 +394,14 @@ void AdminModule::handleSetConfig(const meshtastic_Config &c)
         config.has_display = true;
         if (config.display.screen_on_secs == c.payload_variant.display.screen_on_secs &&
             config.display.flip_screen == c.payload_variant.display.flip_screen &&
-            config.display.wake_on_tap_or_motion == c.payload_variant.display.wake_on_tap_or_motion &&
             config.display.oled == c.payload_variant.display.oled) {
             requiresReboot = false;
         }
+#if !MESHTASTIC_EXCLUDE_ENVIRONMENTAL_SENSOR
+        if (config.display.wake_on_tap_or_motion == false && c.payload_variant.display.wake_on_tap_or_motion == true) {
+            accelerometerThread->start();
+        }
+#endif
         config.display = c.payload_variant.display;
         break;
     case meshtastic_Config_lora_tag:

@@ -1,3 +1,4 @@
+#pragma once
 #include "configuration.h"
 
 #if !MESHTASTIC_EXCLUDE_ENVIRONMENTAL_SENSOR
@@ -123,6 +124,7 @@ class AccelerometerThread : public concurrency::OSThread
             // Duration is number of occurances needed to trigger, higher threshold is less sensitive
         }
     }
+    void start() { setIntervalFromNow(0); };
 
   protected:
     int32_t runOnce() override
@@ -174,7 +176,7 @@ class AccelerometerThread : public concurrency::OSThread
     Adafruit_LIS3DH lis;
     Adafruit_LSM6DS3TRC lsm;
 };
-
+extern AccelerometerThread *accelerometerThread;
 } // namespace concurrency
 
 #endif
