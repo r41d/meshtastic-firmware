@@ -53,9 +53,17 @@ extern Adafruit_DRV2605 drv;
 extern AudioThread *audioThread;
 #endif
 
-#if !defined(ARCH_PORTDUINO) && !defined(ARCH_STM32WL)
+#if !defined(ARCH_PORTDUINO) && !defined(ARCH_STM32WL) && !MESHTASTIC_EXCLUDE_ENVIRONMENTAL_SENSOR
 #include "AccelerometerThread.h"
 #include "AmbientLightingThread.h"
+extern AccelerometerThread *accelerometerThread;
+extern AmbientLightingThread *ambientLightingThread;
+
+#ifdef HAS_NCP5623
+#include <NCP5623.h>
+NCP5623 rgb;
+#endif
+
 #endif
 
 extern bool isVibrating;
